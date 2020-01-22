@@ -1,0 +1,48 @@
+#first{
+  background: linear-gradient(to left, #616161 , #9bc5c3);
+  width :100%;
+  height:700px;
+   padding-top:20px;
+}
+#second{
+ 
+   margin: 0 auto;
+   background-color:white;
+  width:400px;
+  height:400px;
+}
+.aa{
+  float:left;
+  text-align:center;
+  
+  margin-left:50px;
+  width:70px;
+  height:70px;
+  background-color:#aaa;
+}
+.third{
+  font-size:50px;
+  margin-top:10px;
+  margin-left:50px;
+  height:70px;
+  width:80%;
+}
+.bb{
+  float:left;
+  text-align:center;
+  
+  width:70px;
+  height:70px;
+  background-color:#aaa;
+  border-width:thin;
+  border-color:lightblue;
+}
+.cc{
+  float:left;
+  text-align:center;
+  width:70px;
+  height:70px;
+  background-color:#aaa;
+  border-width:thin;
+  border-color:lightblue;
+}
