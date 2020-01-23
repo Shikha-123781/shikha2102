@@ -1,0 +1,27 @@
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<style>
+		#div1{
+			background-color:yellow;
+			height:200px;
+			width: 200px;
+		}
+	</style>
+		<script>
+			$(document).ready(function(){
+				$("#btn").click(function(){
+                   $("#div1").slideUp("slow",function(){
+                   	alert("hello world!");
+                   });
+				});
+			});
+		
+		</script>
+	
+</head>
+<body>
+	<button id="btn">click here</button>
+	<div id="div1"></div>
+</body>
+</html>
