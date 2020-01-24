@@ -1,23 +1,18 @@
 <html>
-<head>
-	</head>
-<body>
-	<script>
-		function add(a,b,callback)
-		{
+  <head>
+    <title>CallBack in Js</title>>
+  <body>
+    <script>
+		function add(a,b,callback) {
            var c=a+b;
            callback(c);
 		}
-		function call()
-		{
-			alert("hello world");
-		}
-		function display(c,call)
-		{
+		
+		function display(c,call) {
 			alert(c);
 			call();
 		}
 		add(10,20,display);
 	</script>
-</body>
+  </body>
 </html>
