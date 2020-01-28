@@ -1,0 +1,19 @@
+<html>
+  <head>
+  	<title>Generator</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+    	function* numbergenerator() {
+          let i=0;
+          while(i<50) {
+            yield i++;
+          }
+    	}
+    	const gen = numbergenerator();
+        console.log(gen.next());
+        console.log(gen.next());
+        console.log(gen.next());
+    </script>>
+  </body>
+</html>
