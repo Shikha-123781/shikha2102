@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <title>HTTP Call</title>
+  </head>
+  <body>
+    <button id="getbtn" onclick="getdata()">get</button>
+    <button id="postbtn" onclick="postdata()">post</button>
+    <button id="deletebtn" onclick="deletedata()">delete</button>
+    <button id="putbtn" onclick="putdata()">put</button>
+  <script> 
+        getdata = ()=> {
+          const url = "https://api.github.com/users";
+          params = {method:'get',headers:{'content-type':'application/json'}}
+          fetch(url,params).then((response) => {
+            console.log(response);
+            return response.json();}).then(data => {
+              console.log(data);
+            })
+          }
+        postdata = ()=> {
+         const data = '{"name":"sh","salary":"1000","age":"31"}';
+          params = { method:'post', headers: {'content-type':'application/json'}, body:data }
+          fetch("http://dummy.restapiexample.com/api/v1/create",params).then((response) => {      
+            console.log(response);
+            return response.json();}).then((data) => {
+              console.log(data);
+            })
+          
+        } 
+        deletedata = ()=> {
+         params = { method:'delete', headers:{'content-type':'application/json'}}
+         url = "http://dummy.restapiexample.com/api/v1/delete/66";
+         console.log(url);
+         fetch(url, params).then((response) => {    
+           console.log(response);
+           return response.json();
+         }).then((data) => {
+             console.log(data);
+           })
+        }
+        putdata = ()=> {
+          data = '{"name":shikha,"salary":"4500","age":"30"}';
+          params = { method:'delete', headers: {'content-type':'application/json' },body:data}
+          fetch("http://dummy.restapiexample.com/api/v1/update/21",params).then((response) => {   
+            console.log(response);
+            return response.json();}).then((data) => {
+              console.log(data);
+            })
+        }
+  </script>
+   </body>
+</html>
