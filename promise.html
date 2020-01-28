@@ -1,22 +1,19 @@
-
 <html>
   <head>
     <title>Promise</title>>
   </head>
   <body>
     <script>
-      var promise=new Promise(function(resolve,reject) {
-	  var x=10;
+      var promise = new Promise(function(resolve,reject) {
+	  var x = 10;
 	   if(x<0)
 	     resolve();
 	   else
 		 reject();
 		});
-		promise
-		  .then(function(){
+		promise.then(function(){
 		   document.write("success");},function (){document.write("rejected")});
-		promise
-		   .catch(function(){document.write("error");});
+		promise.catch(function(){document.write("error");});
 	</script>
    </body>
 </html>
