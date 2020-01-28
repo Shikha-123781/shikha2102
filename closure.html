@@ -1,0 +1,18 @@
+<html>
+  <head>
+    <title>closure</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      function outer() {
+      	var j = 10;
+      	function inner() {
+      	  var k = j**2;
+      	  document.write(k);
+      	}
+      	inner();
+      }
+      outer();
+    </script>
+  </body>
+</html>>
