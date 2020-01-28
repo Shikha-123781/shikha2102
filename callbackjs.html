@@ -4,13 +4,12 @@
   <body>
     <script>
 		function add(a,b,callback) {
-           var c=a+b;
-           callback(c);
+          var c=a+b;
+          callback(c);
 		}
-		
 		function display(c,call) {
-			alert(c);
-			call();
+	      alert(c);
+		  call();
 		}
 		add(10,20,display);
 	</script>
