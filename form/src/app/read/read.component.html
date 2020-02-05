@@ -1,0 +1,22 @@
+<a id="add" routerLink="/add">Add</a>
+<br>
+<br>
+<table style="width:100%" >
+  <thead class="thead-dark">
+    <th>USERID</th>
+    <th>id</th> 
+    <th>title</th>
+    <th>body</th>
+    <th>action</th>
+  </thead>
+  <tbody>
+  <tr *ngFor="let post of posts">
+    <td>{{post.userId}}</td>
+    <td>{{post.id}}</td>
+    <td>{{post.title}}</td>
+    <td>{{post.body}}</td>
+    <td><a routerLink="">Delete</a><br><a routerLink="">Update</a></td>
+  </tr>
+</tbody>
+</table>
+<!--<p id="para">{{str}}</p>-->
