@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GetpostsService } from '../getposts.service';
+import { GetPostsService } from '../getposts.service';
 import { ActivatedRoute, Params } from '@angular/router';
 @Component({
   selector: 'app-update',
@@ -12,7 +12,7 @@ export class UpdateComponent implements OnInit {
   title: any;
   body: any;
   dt: any;
-  constructor(private data: GetpostsService, private route: ActivatedRoute) { }
+  constructor(private data: GetPostsService, private route: ActivatedRoute) { }
 
   ngOnInit() {
   	this.route.params.forEach((params:Params)=>{
@@ -21,7 +21,7 @@ export class UpdateComponent implements OnInit {
   }
   update(){
 this.item = { userId: this.userid, title: this.title, body: this.body };
-  	this.data.getupdate(this.dt,this.item);
+  	this.data.getUpdate(this.dt,this.item);
   	alert("your data is updated");
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GetpostsService } from '../getposts.service';
+import { GetPostsService } from '../getposts.service';
 @Component({
   selector: 'app-add',
   templateUrl: './add.component.html',
@@ -11,13 +11,13 @@ title: String;
 body: String;
 
 data: Object;
-  constructor(private item: GetpostsService) { }
+  constructor(private item: GetPostsService) { }
 
   ngOnInit() {
   }
   add(){
   this.data = {userId: this.userid, title: this.title, body: this.body};
-  	this.item.getpost(this.data);
+  	this.item.getPost(this.data);
   	alert("your data is added");
   }
 

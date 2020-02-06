@@ -3,19 +3,19 @@ import { HttpClient} from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
-export class GetpostsService {
+export class GetPostsService {
   post: Object;
   constructor(private http :HttpClient) { }
-  getposts(){
+  getPosts(){
   	return this.http.get("https://jsonplaceholder.typicode.com/posts");
   }
-  getdelete(id){
+  getDelete(id){
   	 this.http.delete("https://jsonplaceholder.typicode.com/posts/`${id}`");
   }
-  getupdate(id,item){
+  getUpdate(id,item){
     this.http.put("http://jsonplaceholder.typicode.com/posts/`${id}`",item);
   }
-  getpost(data){
+  getPost(data){
   	this.http.post("http://jsonplaceholder.typicode.com/posts",data);
   }
 }

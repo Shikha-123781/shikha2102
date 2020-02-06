@@ -4,7 +4,7 @@ import { HttpClientModule} from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ReadComponent } from './read/read.component';
-import { GetpostsService } from './getposts.service';
+import { GetPostsService } from './getposts.service';
 import { DeleteComponent } from './delete/delete.component';
 import { UpdateComponent } from './update/update.component';
 import { AddComponent } from './add/add.component';
@@ -23,7 +23,7 @@ import {FormsModule} from '@angular/forms';
     HttpClientModule,
     FormsModule
   ],
-  providers: [GetpostsService],
+  providers: [GetPostsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

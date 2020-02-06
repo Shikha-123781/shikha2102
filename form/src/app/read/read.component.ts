@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GetpostsService } from '../getposts.service';
+import { GetPostsService } from '../getposts.service';
 @Component({
   selector: 'app-read',
   templateUrl: './read.component.html',
@@ -8,9 +8,9 @@ import { GetpostsService } from '../getposts.service';
 export class ReadComponent implements OnInit {
   str: String;
   posts: Object;
-  constructor(private data:GetpostsService) { }
+  constructor(private data:GetPostsService) { }
   ngOnInit() {
-  	this.data.getposts().subscribe(item=> {
+  	this.data.getPosts().subscribe(item=> {
   		this.posts = item;	
     })
   }

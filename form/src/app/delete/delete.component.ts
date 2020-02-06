@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { GetpostsService } from '../getposts.service';
+import { GetPostsService } from '../getposts.service';
 @Component({
   selector: 'app-delete',
   templateUrl: './delete.component.html',
@@ -8,12 +8,12 @@ import { GetpostsService } from '../getposts.service';
 })
 export class DeleteComponent implements OnInit {
   x: any;
-  constructor( private route: ActivatedRoute, private data: GetpostsService) { }
+  constructor( private route: ActivatedRoute, private data: GetPostsService) { }
 
   ngOnInit() {
     console.log(this.route);
   	this.route.params.forEach((params:Params)=>{
-   	this.data.getdelete(params['abc']);
+   	this.data.getDelete(params['abc']);
  	});
    }
 }

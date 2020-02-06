@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GetpostsService } from './getposts.service';
+import { GetPostsService } from './getposts.service';
 
-describe('GetpostsService', () => {
+describe('GetPostsService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
