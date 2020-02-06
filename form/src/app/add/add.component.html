@@ -1,9 +1,6 @@
-<div >
-	<form>
-	userId: <input type="text"><br><br>
-	id: <input type="text"><br><br>
-	title: <input type="text"><br><br>
-	body: <input type="text"><br><br>
-	<button type="submit">SUBMIT</button>
-</form>
+<div align="center">
+  userId: <input type="text"  [(ngModel)]="userid"><br><br>
+  title: <input type="text"  [(ngModel)]="title"><br><br>
+  body: <input type="text"  [(ngModel)]="body"><br><br>
+  <button type="submit" (click)="add()">SUBMIT</button>
 </div>

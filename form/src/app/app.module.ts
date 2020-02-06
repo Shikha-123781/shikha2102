@@ -8,6 +8,7 @@ import { GetpostsService } from './getposts.service';
 import { DeleteComponent } from './delete/delete.component';
 import { UpdateComponent } from './update/update.component';
 import { AddComponent } from './add/add.component';
+import {FormsModule} from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +20,8 @@ import { AddComponent } from './add/add.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [GetpostsService],
   bootstrap: [AppComponent]
