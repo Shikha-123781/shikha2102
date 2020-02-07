@@ -1,0 +1,19 @@
+<h1>PerSonal Information</h1>
+<form #contactForm="ngForm" (ngSubmit)="onSubmit()">
+  <p>firstName:<input type="text" name="firstName"  [(ngModel)]='contact.firstName' #name="ngModel" required >
+  <span [hidden]="name.valid||name.pristine">this field is required</span></p>
+  <p>lastName:<input type="text" name="lastName" [(ngModel)]='contact.lastName' #lname="ngModel" required>
+  <span [hidden]="lname.valid||lname.pristine">this field is required</span></p>
+  <p>age:<input type="text" name="age" [(ngModel)]='contact.age' required #age="ngModel">
+ <span [hidden]="age.valid||age.pristine">this field is required</span></p>
+  <p>email:<input type="text" name="email" required [(ngModel)]='contact.email' #email="ngModel">
+  <span [hidden]="email.valid||email.pristine">this field is required</span></p>
+  female:<input type="radio" name="gender" required>
+  	male:<input type="radio" name="gender" required>
+  <p>password:<input type="text" name="password" required [(ngModel)]=
+      "contact.password" #pass="ngModel" >
+  <span [hidden]="pass.valid||pass.pristine">this field is required</span></p>
+  <p>confirm  Password:<input type="text" [type]=hide name="confirmPassword" required [(ngModel)]="contact.confirmPassword" #cp="ngModel">
+  <span [hidden]="cp.valid||cp.pristine">this field is required</span></p>
+  <p><button type="submit" [disabled]=!contactForm.form.valid>Submit</button></p>
+</form>
