@@ -1,0 +1,10 @@
+ <div> 
+   <form [formGroup]="form">
+      <input type="text" placeholder="userName" formControlName = 'userName'>
+      <br>
+      <br>
+	  <input type="password" placeholder="password" formControlName = 'password'>
+	  <button (click)='onSubmit()'>submit</button>
+    </form>
+    <a routerLink='/signup'>signup</a>
+</div>

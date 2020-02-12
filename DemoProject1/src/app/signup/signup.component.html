@@ -1,0 +1,44 @@
+<div align="center" id="div1">
+  <form [formGroup]="formGroup" id="form">
+    <input type="text" placeholder="Name" formControlName = "Name">
+    <span *ngIf="submitted && formGroup.get('Name').errors && formGroup.get('Name').errors.required">Name is required</span>
+    <br>
+    <input type="text" placeholder="userName" formControlName = "userName" > 
+    <span *ngIf="submitted && formGroup.get('userName').errors && formGroup.get('userName').errors.required">lastName is required</span> 
+    <br>
+    <div formGroupName = "address">
+      <p>address</p>
+      <input type="text" placeholder="street" formControlName = "street">
+      <br>
+      <input type="text" placeholder="city" formControlName = "city">
+      <br>
+      <input type="text" placeholder="state" formControlName = "state">
+    </div>
+    <br>
+    <input type="text" placeholder="email" formControlName = "email">
+    <span *ngIf="submitted && formGroup.get('email').errors && formGroup.get('email').errors.required">email is required</span> 
+    <span  *ngIf="submitted && formGroup.get('email').errors && 
+    (formGroup.get('email').errors.email || formGroup.get('email').errors.pattern)">email is invalid</span> 
+     
+    <br>
+    <input type="text" placeholder="age" formControlName="age">
+    <span *ngIf="submitted && formGroup.get('age').errors && formGroup.get('age').errors.required">age is required</span>
+    <span *ngIf="submitted && formGroup.get('age').errors &&
+    (formGroup.get('age').errors.validAge || formGroup.get('age').errors.pattern) && !(formGroup.get('age').errors.required)">invalid age</span>
+    <br>
+    <input type="password" placeholder="password" formControlName="password">
+    <span *ngIf="submitted && formGroup.get('password').errors && formGroup.get('password').errors.required">
+    password is required</span>
+    <br>
+    <input type="password" placeholder="confirmPassword" formControlName
+    = "confirmPassword">
+    <span *ngIf="submitted && formGroup.get('confirmPassword').errors && formGroup.get('confirmPassword').errors.required">confirmPassword is required</span>
+    <span  *ngIf="submitted  && formGroup.errors && formGroup.errors.passwordMismatch && !(formGroup.get('confirmPassword').errors && formGroup.get('confirmPassword').errors.required)">
+    confirmPassword is not valid</span>
+    <br>
+    <button (click) = 'onSubmit()'>Submit</button>
+    <button (click) = 'resetForm()'>Reset</button>
+  </form>
+</div>
+
+
