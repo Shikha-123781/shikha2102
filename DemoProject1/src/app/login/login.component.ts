@@ -8,26 +8,54 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   data: any;
-  form: FormGroup;
-  constructor(private fb: FormBuilder, private router: Router) { }
+  loginForm: FormGroup;
+  submitted = false;
+  constructor(private fb: FormBuilder, private router: ActivatedRoute, private route: Router) { }
 
   ngOnInit() {
-  	this.form = this.fb.group({
-      userName: ['',Validators.required],
-      password: ['',Validators.required]
-    }); 
-  }
-  
-  onSubmit() {
-  	let userName = this.form.get('userName').value;
-  	this.data = localStorage.getItem(this.form.get('userName').value);
-  	let obj = JSON.parse(this.data);
-    if(this.data == null)
-      alert('UserName does not match to any registered name')
-    else if(obj.password != this.form.get('password').value)
-      alert('wrong password')
-    else 
-      alert('valid username and password')
+    if(localStorage.getItem('userName')){
+      this.route.navigateByUrl('/showDetails/'+localStorage.getItem('userName'));
+    }
+    this.loginForm = this.fb.group({
+      userName: ['',[Validators.required,this.validUserName]],
+      password: ['',Validators.required]}, 
+      { validator: this.passwordMatch }
+    );   
   }
 
+  onSubmit() {   
+    this.submitted = true;
+    let userName = this.loginForm.get('userName').value;
+    if(this.loginForm.valid) {
+      localStorage.setItem('userName',userName);
+      this.route.navigateByUrl('/showDetails/'+userName);
+    }
+  }
+
+  validUserName(control: FormControl) {
+    let data;
+    let userName = control.value;
+    if(localStorage.getItem(userName))
+      data = localStorage.getItem(userName);
+    if(!data) {
+      return {validUserName:true}
+    } else  {
+      return null;
+    }
+  }
+
+  hasPasswordError() {
+    return this.loginForm.get('password').errors && this.loginForm.get('password').errors.required
+  }
+
+  passwordMatch(control:AbstractControl) {
+   let userName =  control.get('userName').value;
+   if(localStorage.getItem(userName)) {
+    let password = JSON.parse(localStorage.getItem(userName)).password;
+  if(password != control.get('password').value)
+    return {passwordMatch: true};
+  else
+    return null;
+   }
+  }
 }

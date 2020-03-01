@@ -1,10 +1,20 @@
- <div> 
-   <form [formGroup]="form">
-      <input type="text" placeholder="userName" formControlName = 'userName'>
+   <div> 
+   <form [formGroup]="loginForm" >
+      <mat-form-field>
+        <input matInput type="text" placeholder="userName" class="loginForm-control" formControlName = 'userName'>
+      </mat-form-field>
+      <mat-error *ngIf="submitted && loginForm.get('userName').errors && loginForm.get('userName').errors.required">userName is required</mat-error>
+      <mat-error *ngIf="submitted && loginForm.get('userName').errors && loginForm.get('userName').errors.validUserName && (!loginForm.get('userName').errors.required) ">userName is not match to registered username</mat-error>
       <br>
       <br>
-	  <input type="password" placeholder="password" formControlName = 'password'>
-	  <button (click)='onSubmit()'>submit</button>
+      <mat-form-field>
+	      <input matInput type="password" placeholder="password" class="loginForm-control" formControlName = 'password'>
+      </mat-form-field>
+	    <mat-error *ngIf="submitted && hasPasswordError()">password is required</mat-error>
+	    <mat-error *ngIf="submitted && !hasPasswordError() && loginForm.errors && loginForm.errors.passwordMatch">wrong password</mat-error>
+	  <br>
+      <button  mat-raised-button (click)=
+      'onSubmit()'>submit</button>
     </form>
-    <a routerLink='/signup'>signup</a>
+    if new user  <a routerLink='/signup'>signup</a>
 </div>

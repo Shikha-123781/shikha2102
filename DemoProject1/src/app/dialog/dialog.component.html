@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Enter the name</h2>
+<mat-dialog-content [formGroup]="form">
+        <input matInput placeholder="Enter name" formControlName="name">
+        <mat-error *ngIf="flag">name already exist</mat-error><br><br>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <br><br><br><br><br>
+    <button mat-raised-button (click)="close()">Close</button>
+    <button mat-raised-button (click)="save()">Save</button>
+</mat-dialog-actions>

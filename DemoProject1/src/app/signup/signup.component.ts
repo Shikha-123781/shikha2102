@@ -1,8 +1,9 @@
 import { Component, OnInit,Inject } from '@angular/core';
 import { AbstractControl,FormControl,FormGroup, FormBuilder,Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {LOCAL_STORAGE, WebStorageService} from 'angular-webstorage-service';
-
+import {SignupDialogComponent} from '../signup-dialog/signup-dialog.component';
+import { MatDialog,MatDialogConfig } from '@angular/material/dialog';
+declare const $:any;
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -16,22 +17,23 @@ export class SignupComponent implements OnInit {
   isHidden = false;
   value: any;
   item = 'item';
-  constructor(@Inject(LOCAL_STORAGE) private storage: WebStorageService,
-  private fb: FormBuilder, private activatedRoute: ActivatedRoute, 
-  private router: Router) {
+  constructor(private fb: FormBuilder, private activatedRoute: ActivatedRoute, 
+  private router: Router, private dialog: MatDialog ) {
   }
 
   ngOnInit() {
     this.formGroup = this.fb.group({
       Name: ['',Validators.required],
-      userName: ['',Validators.required],
+      userName: ['',[Validators.required,this.userExist]],
       address: this.fb.group({
         street: [''],
         city: [''],
         state: ['']
       }),
-      age: ['',[Validators.required, this.validateAge,Validators.pattern('[0-9]{2}')]],
-      email: ['',[Validators.required,Validators.email, Validators.pattern('[^$&*()#!?/|{;<>}]+$')]],
+      age: ['',[Validators.required, this.validateAge,
+      Validators.pattern('[0-9]{2}')]],
+      email: ['',[Validators.required,Validators.email, 
+      Validators.pattern('[^$&*()#!?/|{;<>}]+$'),this.emailExist]],
       password: ['',Validators.required],
       confirmPassword: ['',[Validators.required]]
     }, { validator: this.passwordMatch }); 
@@ -52,35 +54,47 @@ export class SignupComponent implements OnInit {
       return null;
   }
 
-  onSubmit() {
-  	let flag = 0;
-    this.submitted = true;
-    if(this.formGroup.valid) {	
-      const data = {
-       Name: this.formGroup.get('Name').value, userName: this.formGroup.get('userName').value, age: this.formGroup.get('age').value,
-        email: this.formGroup.get('email').value,
-        password: this.formGroup.get('password').value 
-      };    
-     let str = JSON.stringify(data);
+  userExist(control:FormControl) { 
      const length = localStorage.length;
      for(let i=0;i<length;i++) {
-     	let item = localStorage.getItem(localStorage.key(i));
-     	item = JSON.parse(item);
-       if(data.userName == localStorage.key(i)||data.email == item.email) {
-       	flag = 1;
-       	break;
+       if(control.value == localStorage.key(i)) {
+        return {validUser: true};
+        break;
        }
-     }
-     if(flag == 0)
-     localStorage.setItem(data.userName, str);
-     else
-       alert('userName or email already registerd');
-    }
-
-    this.router.navigateByUrl('/');
+      }
+      return null;
   }
+  
+  emailExist(control:FormControl) {
+    let item;
+    const length = localStorage.length;
+    for(let i=0;i<length;i++) {
+      item = localStorage.getItem(localStorage.key(i));
+      item = JSON.parse(item);
+      if(typeof(item) == 'object'&& item['email']) { 
+        if(control.value == item.email) {
+          return {emailExist: true};
+          break;
+        }
+      }
+    }
+      return null;
+  }
+
+  onSubmit() {
+    let flag = 0;
+    this.submitted = true;
+    if(this.formGroup.valid) {  
+      this.dialog.open(SignupDialogComponent);
+    }
+  }
+
 
   resetForm() {
     this.formGroup.reset();
+  }
+
+  dataInserted() {
+    this.router.navigateByUrl('/');  
   }
 }

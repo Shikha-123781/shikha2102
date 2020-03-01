@@ -1,1 +1,30 @@
-<p>show-details works!</p>
+ <nav>
+  <i>root></i>
+  <ng-container *ngIf="current">
+    <i *ngFor="let element of arr" >{{element}}></i>
+  </ng-container>
+  <br>
+  <button  mat-raised-button (click)="click('folder')">+folder</button>
+  <button  mat-raised-button (click)="click('file')">+file</button>
+  <button mat-raised-button (click)="back()">back</button>
+  <button id ="logout" mat-raised-button (click)="logout()">
+  Logout</button> 
+  <mat-icon (click)="viewList()">view _list</mat-icon>
+  <mat-icon  (click)="viewGrid()">view_module</mat-icon>
+</nav>
+
+<div *ngIf="gridView">
+  <span *ngFor="let x of folderKey" class="fa fa-folder" (click)="onClick(element)">
+    <i>{{x}}</i>
+  </span>
+  <span *ngFor="let x of fileKey" class="fa fa-file" ><i>{{x}}</i></span>
+</div>
+
+<div *ngIf="listView">
+  <div *ngFor="let element of folderKey">
+    <span class="fa fa-folder" (click)="onClick(element)"><i>{{element}}</i></span> 
+  </div> 
+  <div *ngFor="let element of fileKey">
+    <span class="fa fa-file" ><i>{{element}}</i></span> 
+  </div> 
+</div>  
