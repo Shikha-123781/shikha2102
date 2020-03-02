@@ -10,174 +10,146 @@ declare const $:any;
 })
 
 export class ShowDetailsComponent implements OnInit {
-  param1: any;
-  obj: any;
+  userName: any;
   folderUser: any;
-  object: any;
-  folder:any;
-  file:any;
-  arr : any[];
-  current :any;
-  keys : any[];
-  folderKey = [];
-  value: any[];
-  index = [];
-  values = [];
-  val : any[];
-  vals = [];
+  folderChain : any[];
+  isInsideFolder :any;
+  folderList = [];
+  folder = [];
+  folderValue = [];
+  fileValue = [];
+  file = [];
   fileUser: any;
-  fileKey = [];
-  listView : boolean;;
-  gridView : boolean;
+  fileList = [];
+  listView = true;
+  gridView = false;
+
   constructor(private router: ActivatedRoute,
   private route: Router,
   private dialog: MatDialog) { }
 
   ngOnInit() {
-    if(!localStorage.getItem('userName'))
+    if (!localStorage.getItem('userName')) {
       this.route.navigateByUrl('/');
-    let k =-1;
-    this.router.params.forEach((params:Params) => {
-      this.param1 = params.abc;
+    }
+    this.router.params.forEach((userName: Params) => {
+      this.userName = userName.userName;
     });
-    this.folderUser = this.param1+'1'; 
-    this.fileUser = this.param1+'2';
-    this.ngDoCheck();
-    if(localStorage.getItem(this.fileUser)) {
-      this.val = JSON.parse(localStorage.getItem(this.fileUser));
+    this.folderUser = this.userName + '1'; 
+    this.fileUser = this.userName + '2';
+    if (localStorage.getItem('folderChain')) {
+      this.folderChain = JSON.parse(localStorage.getItem('folderChain'));
     } else {
-        this.val = [];
-    } 
-    if(localStorage.getItem(this.folderUser)) {
-      this.value = JSON.parse(localStorage.getItem(this.folderUser));
-    } else {
-        this.value = [];
+      this.folderChain = [];
     }
-    if(localStorage.getItem('array')) {
-      this.arr = JSON.parse(localStorage.getItem('array'));
-    } else {
-      this.arr = [];
+    if (this.folderChain.length) {
+      this.isInsideFolder = true;
     }
-    if(this.arr.length) {
-      this.current = true;
-    }
-    if(localStorage.getItem('view')) {
-      let view = localStorage.getItem('view');
-      if(view == 'listView')
+    if (localStorage.getItem('view')) {
+      const view = localStorage.getItem('view');
+      if (view == 'listView') {
         this.listView = true;
-      else 
+      } else {
         this.gridView = true;
-    } else {
-        this.listView = true;
+        this.listView = false;
+      }
     }
-    
   }
 
   ngDoCheck() {
-    if(localStorage.getItem(this.folderUser))
-      this.values = JSON.parse(localStorage.getItem(this.folderUser));
-    else
-      this.values = [];
-    if(localStorage.getItem(this.fileUser))
-      this.vals = JSON.parse(localStorage.getItem(this.fileUser));
-    else
-      this.vals = [];
-    if(localStorage.getItem('array')) {
-      this.arr = JSON.parse(localStorage.getItem('array'));
+    if (localStorage.getItem(this.folderUser)) {
+      this.folderValue = JSON.parse(localStorage.getItem(this.folderUser));
+      this.folder = this.folderValue;
+    } 
+    if (localStorage.getItem(this.fileUser)) {
+      this.fileValue = JSON.parse(localStorage.getItem(this.fileUser));
+      this.fileValue = this.fileValue;
+    }
+    if (localStorage.getItem('folderChain')) {
+      this.folderChain = JSON.parse(localStorage.getItem('folderChain'));
     } else {
-      this.arr = [];
-      localStorage.setItem('array',JSON.stringify(this.arr))
+      this.folderChain = [];
+      localStorage.setItem('folderChain',JSON.stringify(this.folderChain))
     }
-    let length = this.arr.length;
-    this.fileKey = [];
-    this.folderKey = [];
-    let k = 0,index =-1;
-    let key;
-    if(length==0) {
-      for(let count=0;count<this.vals.length;count++) {
-        if(typeof(this.vals[count])!='object') {
-          this.fileKey[++index] = this.vals[count];
-        }
-      }
-      index = -1;
-      for(let count=0;count<this.values.length;count++) {
-        this.folderKey[++index] = Object.keys(this.values[count])[0];
+    let folderChainLength = this.folderChain.length;
+    this.fileList = [];
+    this.folderList = [];
+    if (folderChainLength==0) {
+      this.forLengthZero();
+    } else {
+      this.forLengthExist(folderChainLength);
+    } 
+  }
+
+  forLengthZero() {
+    let index = -1;
+    for (let count=0;count<this.fileValue.length;count++) {
+      if (typeof(this.fileValue[count])!='object') {
+        this.fileList[++index] = this.fileValue[count];
       }
     }
-    while(length) {
-      this.folderKey = [];
-      for(let index=0;index<this.values.length;index++) {
-        key = Object.keys(this.values[index])[0];
-        if(key == this.arr[k]) {
-          this.values= this.values[index][key];
+    index = -1;
+    for (let count=0;count<this.folderValue.length;count++) {
+      this.folderList[++index] = Object.keys(this.folderValue[count])[0];
+    }
+  }
+
+  forLengthExist(folderChainLength) {
+    let key,folderChainIndex = 0;
+    while(folderChainLength) {
+      this.folderList = [];
+      this.fileList = [];
+      for (let index in this.folderValue) {
+        key = Object.keys(this.folderValue[index])[0];
+        if (key == this.folderChain[folderChainIndex]) {
+          this.folderValue= this.folderValue[index][key];
           break;
         } 
       }
-      if(this.values.length) { 
-        for(let l=0;l<this.values.length;l++){
-          this.folderKey[l]=Object.keys(this.values[l])[0];
+      if (this.folderValue.length) { 
+        for (let index = 0; index < this.folderValue.length; index++){
+          this.folderList[index]=Object.keys(this.folderValue[index])[0];
         }
-      } else {
-          this.folderKey =[];
-      }
-      for(let index=0;index<this.vals.length;index++) {
-        if(typeof(this.vals[index])=='object') {
-          key = Object.keys(this.vals[index])[0];
-          if(key == this.arr[k]) {
-            this.vals= this.vals[index][key];
+      } 
+      for (let index in this.fileValue) {
+        if (typeof(this.fileValue[index])=='object') {
+          const key = Object.keys(this.fileValue[index])[0];
+          if (key == this.folderChain[folderChainIndex]) {
+            this.fileValue= this.fileValue[index][key];
             break;
           } 
         }
       }
       let count = -1;
-      this.fileKey = [];
-      if(this.vals.length) { 
-        for(let index=0;index<this.vals.length;index++){
-            if(typeof(this.vals[index])!='object') {
-              this.fileKey[++count]=this.vals[index];
+      this.fileList = [];
+      if (this.fileValue.length) { 
+        for (let index in this.fileValue){
+            if (typeof(this.fileValue[index])!='object') {
+              this.fileList[++count]=this.fileValue[index];
             }
         }
-      } else {
-        this.fileKey =[];
-      }
-      k++;
-      length--;
+      } 
+      folderChainIndex++;
+      folderChainLength--;
     }  
-    if(!this.arr.length) {
-      if(this.values) {
-        for(let count=0;count<this.values.length;count++) {
-    
-          this.folderKey[count] = Object.keys(this.values[count])[0];   
-        }
-      }
-    }
   }
 
   folderAdd(folderName) {
-    let k=0,key,index=0,folder;
-    if(localStorage.getItem(this.folderUser)) {
-      this.folder = JSON.parse(localStorage.getItem(this.folderUser));
-      this.file = JSON.parse(localStorage.getItem(this.fileUser));
+    let index = 0;
+    if (this.isInsideFolder) {
+      this.addFolder(this.folder,this.folderChain[0],folderName,index); 
+      this.addFolder(this.file,this.folderChain[0],folderName,index);   
     } else {
-        this.folder = [];
-        this.file = [];
-    }
-    if(this.current) {
-      this.addFolder(this.folder,this.arr[0],folderName,index); 
-      this.addFolder(this.file,this.arr[0],folderName,index);   
-    } else {
-      if(localStorage.getItem(this.folderUser)) {
-        this.value = JSON.parse(localStorage.getItem(this.folderUser));
-        this.value.push({[folderName]:[]});
-        this.folder = this.value;
-        if(localStorage.getItem(this.fileUser)) {
+      if (localStorage.getItem(this.folderUser)) {
+        this.folder = JSON.parse(localStorage.getItem(this.folderUser));
+        this.folder.push({[folderName]:[]});
+        if (localStorage.getItem(this.fileUser)) {
           this.file = JSON.parse(localStorage.getItem(this.fileUser));
         }
         this.file.push({[folderName]:[]});
       } else {
-        this.value.push({[folderName]:[]});
-        this.folder = this.value;
-        if(localStorage.getItem(this.fileUser)) {
+        this.folder.push({[folderName]:[]});
+        if (localStorage.getItem(this.fileUser)) {
           this.file = JSON.parse(localStorage.getItem(this.fileUser));
         }
         this.file.push({[folderName]:[]});
@@ -187,88 +159,42 @@ export class ShowDetailsComponent implements OnInit {
     localStorage.setItem(this.folderUser,str);
     str = JSON.stringify(this.file);
     localStorage.setItem(this.fileUser,str);
+
   }
 
   fileAdd(fileName) {
-    let k=0,key,index=0,folder;
-    if(localStorage.getItem(this.fileUser)) {
+    let index=0;
+    if (localStorage.getItem(this.fileUser)) {
       this.file= JSON.parse(localStorage.getItem(this.fileUser));
     } else {
       this.file = [];
     }
-    if(this.current) {
-      this.addFile(this.file,this.arr[0],fileName,index);   
+    if (this.isInsideFolder) {
+      this.addFile(this.file,this.folderChain[0],fileName,index);   
     } else {
       this.file.push(fileName);
     } 
     let str = JSON.stringify(this.file);
     localStorage.setItem(this.fileUser,str);
-
   }
 
   onClick(name) {
-    this.current = true;
-    this.folderKey =[];
-    this.fileKey = [];
-    let key;
-    this.arr.push(name);
-    localStorage.setItem('array',JSON.stringify(this.arr));
-    let k =0;
-    let j = this.arr.length;
-    this.values = JSON.parse(localStorage.getItem(this.folderUser));
-    this.vals = JSON.parse(localStorage.getItem(this.fileUser));
-    while(j) {
-      for(let index=0;index<this.values.length;index++) {
-        key = Object.keys(this.values[index])[0];
-        if(key == this.arr[k]) {
-          this.values= this.values[index][key];
-          break;
-        } 
-      }
-      for(let index=0;index<this.vals.length;index++) {
-        if(typeof(this.vals[index])== 'object') {
-          key = Object.keys(this.vals[index])[0];
-          if(key == this.arr[k]) {
-            this.vals= this.vals[index][key];
-            break;
-          }
-        } 
-      }
-      let count = -1;
-      if(this.vals.length) { 
-        this.fileKey = [];
-        for(let index=0;index<this.vals.length;index++){
-          if(typeof(this.vals[index])!='object') {
-            this.fileKey[++count]=this.vals[index];
-          }
-        }
-      } else {
-          this.fileKey =[];
-      }
-      if(this.values.length) { 
-        this.folderKey = [];
-        for(let index=0;index<this.values.length;index++) {
-          this.folderKey[index]=Object.keys(this.values[index])[0];
-        }
-      } else {
-          this.folderKey =[];
-      }
-      k++;
-      j--;
-    }
+    this.isInsideFolder = true;
+    this.folderChain.push(name);
+    localStorage.setItem('folderChain',JSON.stringify(this.folderChain));
   }
 
   addFolder(directory,targetFolder,folderName,index) {
-    if(directory && directory.length) {
+    if (directory && directory.length) {
       directory.forEach(dir => {
         if (dir[targetFolder]) {
-          if(index == (this.arr.length)-1) {
+          if (index == (this.folderChain.length)-1) {
             dir[targetFolder].push({
               [folderName]: []
             });
           } else {
             const innerDir = Object.values(dir);
-            innerDir.forEach(d => this.addFolder(d,this.arr[++index], 
+            innerDir.forEach(d => this.addFolder(d,this.folderChain[++index], 
             folderName,index))
           } 
         }
@@ -277,15 +203,15 @@ export class ShowDetailsComponent implements OnInit {
   }
 
   addFile(directory,targetFolder,fileName,index) {
-    if(directory && directory.length) {
+    if (directory && directory.length) {
       directory.forEach(dir => {
         if(typeof(dir)=='object') {
           if (dir[targetFolder]) {
-            if(index == (this.arr.length)-1) {
+            if (index == (this.folderChain.length)-1) {
               dir[targetFolder].push(fileName);
             } else {
               const innerDir = Object.values(dir);
-              innerDir.forEach(d => this.addFile(d,this.arr[++index], 
+              innerDir.forEach(d => this.addFile(d,this.folderChain[++index], 
               fileName,index))
             } 
           }
@@ -295,62 +221,13 @@ export class ShowDetailsComponent implements OnInit {
   }
 
   back() {
-    this.arr.pop();
-    localStorage.setItem('array',JSON.stringify(this.arr));
-    this.values = JSON.parse(localStorage.getItem(this.folderUser));
-    this.vals = JSON.parse(localStorage.getItem(this.fileUser));
-    let length = this.arr.length;
-    this.fileKey = [];
-    let k = 0;
-    let key;
-    while(length) {
-      for(let index=0;index<this.values.length;index++) {
-        key = Object.keys(this.values[index])[0];
-        if(key == this.arr[k]) {
-          this.values= this.values[index][key];
-          break;
-        } 
-      }
-      if(this.values.length) { 
-        for(let index=0;index<this.values.length;index++){
-          this.folderKey[index]=Object.keys(this.values[index])[0];
-        }
-      } else {
-          this.folderKey =[];
-      }
-      for(let index=0;index<this.vals.length;index++) {
-         if(typeof(this.vals[index])=='object') {
-          key = Object.keys(this.vals[index])[0];
-          if(key == this.arr[k]) {
-            this.vals= this.vals[index][key];
-            break;
-          } 
-        }
-      }
-      if(this.vals.length) { 
-        for(let index=0;index<this.vals.length;index++){
-            if(typeof(this.vals[index])!='object') {
-              this.fileKey[index]=this.vals[index];
-              console.log(this.fileKey[index])
-            }
-        }
-      } else {
-          this.fileKey =[];
-      }
-      k++;
-      length--;
-    }  
-    if(!this.arr.length) {
-      this.values = JSON.parse(localStorage.getItem(this.folderUser));
-      for(let count=0;count<this.values.length;count++) {
-        this.folderKey[count] = Object.keys(this.values[count])[0];   
-      }
-    }
+    this.folderChain.pop();
+    localStorage.setItem('folderChain',JSON.stringify(this.folderChain));
   }   
 
   logout() {
     localStorage.removeItem('userName');
-    localStorage.removeItem('array');
+    localStorage.removeItem('folderChain');
     localStorage.removeItem('view');
     this.route.navigateByUrl("/");
   } 
@@ -367,17 +244,17 @@ export class ShowDetailsComponent implements OnInit {
     localStorage.setItem('view','gridView');
   }
 
-  click(type) {
+  dialogOpen(type) {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '250px',
       height:'300px',
-      data: {type:type,username:this.param1},
+      data: {type:type,userName:this.userName, title: 'Enter ' + type + ' name'},
       disableClose: true
     });
     
     dialogRef.afterClosed().subscribe(result => {
-      if(result.name) {
-        if(type=="folder") {
+      if (result) {
+        if (type=="folder") {
           this.folderAdd(result.name);
         } else {
           this.fileAdd(result.name);

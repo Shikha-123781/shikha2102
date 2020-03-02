@@ -23,24 +23,24 @@ export class SignupComponent implements OnInit {
 
   ngOnInit() {
     this.formGroup = this.fb.group({
-      Name: ['',Validators.required],
-      userName: ['',[Validators.required,this.userExist]],
+      name: ['', Validators.required],
+      userName: ['', [Validators.required, this.userExist]],
       address: this.fb.group({
         street: [''],
         city: [''],
         state: ['']
       }),
-      age: ['',[Validators.required, this.validateAge,
+      age: ['', [Validators.required, this.validateAge,
       Validators.pattern('[0-9]{2}')]],
-      email: ['',[Validators.required,Validators.email, 
-      Validators.pattern('[^$&*()#!?/|{;<>}]+$'),this.emailExist]],
-      password: ['',Validators.required],
-      confirmPassword: ['',[Validators.required]]
+      email: ['', [Validators.required, Validators.email, 
+      Validators.pattern('[^$&*()#!?/|{;<>}]+$'), this.emailExist]],
+      password: ['', Validators.required],
+      confirmPassword: ['', [Validators.required]]
     }, { validator: this.passwordMatch }); 
   }
   
   passwordMatch(c: AbstractControl) {
-    if(c.get('password').value != c.get('confirmPassword').value) {
+    if (c.get('password').value != c.get('confirmPassword').value) {
       return { passwordMismatch: true };
     } else {
         return null ;
@@ -48,43 +48,48 @@ export class SignupComponent implements OnInit {
   }
    
   validateAge(control: FormControl) {
-    if(control.value < 18 )
+    if (control.value < 18 ) {
       return { validAge: true };
-    else
+    } else {
       return null;
+    }
   }
 
-  userExist(control:FormControl) { 
-     const length = localStorage.length;
-     for(let i=0;i<length;i++) {
-       if(control.value == localStorage.key(i)) {
+  userExist(control: FormControl) { 
+    const length = localStorage.length;
+    for (let i = 0; i < length; i++) {
+      if (control.value == localStorage.key(i)) {
         return {validUser: true};
         break;
-       }
       }
-      return null;
+    }
+    return null;
   }
   
-  emailExist(control:FormControl) {
+  emailExist(control: FormControl) {
     let item;
     const length = localStorage.length;
-    for(let i=0;i<length;i++) {
+    for (let i = 0; i < length; i++) {
       item = localStorage.getItem(localStorage.key(i));
       item = JSON.parse(item);
-      if(typeof(item) == 'object'&& item['email']) { 
-        if(control.value == item.email) {
+      if (typeof(item) == 'object' && item['email']) { 
+        if (control.value == item.email) {
           return {emailExist: true};
           break;
         }
       }
     }
-      return null;
+    return null;
   }
 
   onSubmit() {
-    let flag = 0;
     this.submitted = true;
-    if(this.formGroup.valid) {  
+    if (this.formGroup.valid) {
+      const detail = { "name": this.formGroup.get('name').value,
+      "userName": this.formGroup.get('userName').value,"age": this.formGroup.get('age').value,
+      "email": this.formGroup.get('email').value,
+      "password": this.formGroup.get('password').value }; 
+      localStorage.setItem(this.formGroup.get('userName').value, JSON.stringify(detail));
       this.dialog.open(SignupDialogComponent);
     }
   }

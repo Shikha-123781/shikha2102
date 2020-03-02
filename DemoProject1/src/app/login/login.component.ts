@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { AbstractControl,FormControl,FormGroup, FormBuilder,Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-login',
@@ -13,12 +13,12 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder, private router: ActivatedRoute, private route: Router) { }
 
   ngOnInit() {
-    if(localStorage.getItem('userName')){
+    if (localStorage.getItem('userName')){
       this.route.navigateByUrl('/showDetails/'+localStorage.getItem('userName'));
     }
     this.loginForm = this.fb.group({
-      userName: ['',[Validators.required,this.validUserName]],
-      password: ['',Validators.required]}, 
+      userName: ['', [Validators.required, this.validUserName]],
+      password: ['', Validators.required]}, 
       { validator: this.passwordMatch }
     );   
   }
@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {   
     this.submitted = true;
     let userName = this.loginForm.get('userName').value;
-    if(this.loginForm.valid) {
+    if (this.loginForm.valid) {
       localStorage.setItem('userName',userName);
       this.route.navigateByUrl('/showDetails/'+userName);
     }
@@ -35,9 +35,9 @@ export class LoginComponent implements OnInit {
   validUserName(control: FormControl) {
     let data;
     let userName = control.value;
-    if(localStorage.getItem(userName))
+    if (localStorage.getItem(userName))
       data = localStorage.getItem(userName);
-    if(!data) {
+    if (!data) {
       return {validUserName:true}
     } else  {
       return null;
@@ -49,13 +49,14 @@ export class LoginComponent implements OnInit {
   }
 
   passwordMatch(control:AbstractControl) {
-   let userName =  control.get('userName').value;
-   if(localStorage.getItem(userName)) {
-    let password = JSON.parse(localStorage.getItem(userName)).password;
-  if(password != control.get('password').value)
-    return {passwordMatch: true};
-  else
-    return null;
-   }
+    let userName =  control.get('userName').value;
+    if (localStorage.getItem(userName)) {
+      let password = JSON.parse(localStorage.getItem(userName)).password;
+      if (password != control.get('password').value) {
+        return {passwordMatch: true};
+      } else  {
+        return null;
+      }
+    }
   }
 }

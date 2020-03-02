@@ -1,10 +1,9 @@
 <div align="center" id="div1">
   <form [formGroup]="formGroup" id="form">
     <mat-form-field>
-      <input matInput type="text" placeholder="Name" class="form-control" formControlName = 
-      "Name">
+      <input matInput type="text" placeholder="Name" class="form-control" formControlName = "name">
       </mat-form-field>
-    <mat-error matInput *ngIf="submitted && formGroup.get('Name').errors && formGroup.get('Name').errors.required">Name is required</mat-error>
+    <mat-error matInput *ngIf="submitted && formGroup.get('name').errors && formGroup.get('name').errors.required">Name is required</mat-error>
     <br>
      <mat-form-field>
       <input matInput type="text" placeholder="userName" class="form-control" formControlName = "userName" >
@@ -59,15 +58,3 @@
     <button  mat-raised-button  (click) = 'resetForm()'>Reset</button>
   </form>
 </div>
- <div class="modal fade" id="addDetails" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-body">
-           <p>data is inserted</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" (click)="dataInserted()" data-dismiss="modal">ok</button>
-        </div>
-      </div>    
-    </div>
-  </div>

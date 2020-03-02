@@ -5,9 +5,9 @@ import { SignupComponent } from './signup/signup.component';
 import { ShowDetailsComponent } from './show-details/show-details.component';
 
 const routes: Routes = [
-  { path:'', component: LoginComponent },
-  { path:'signup', component: SignupComponent },
-  {path:'showDetails/:abc', component: ShowDetailsComponent}
+  { path: '', component: LoginComponent },
+  { path: 'signup', component: SignupComponent },
+  {path: 'showDetails/:userName', component: ShowDetailsComponent}
 ];
 
 @NgModule({

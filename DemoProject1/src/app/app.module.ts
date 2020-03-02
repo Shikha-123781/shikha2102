@@ -9,8 +9,8 @@ import { LoginComponent } from './login/login.component';
 import { StorageServiceModule } from 'angular-webstorage-service';
 import { ShowDetailsComponent } from './show-details/show-details.component';
 import { DialogComponent } from './dialog/dialog.component';
-import { MatDialogModule,MatFormFieldModule, 
-  MatButtonModule, MatIconModule, MatInputModule} from '@angular/material';
+import { MatDialogModule, MatFormFieldModule, MatButtonModule,
+MatIconModule, MatInputModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SignupDialogComponent } from './signup-dialog/signup-dialog.component';
 @NgModule({
@@ -32,7 +32,8 @@ import { SignupDialogComponent } from './signup-dialog/signup-dialog.component';
     MatFormFieldModule,
     BrowserAnimationsModule,
     MatButtonModule,
-    MatIconModule,MatInputModule
+    MatIconModule, 
+    MatInputModule
   ],
   entryComponents: [
     DialogComponent,
