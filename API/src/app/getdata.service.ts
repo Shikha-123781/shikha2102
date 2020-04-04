@@ -14,9 +14,9 @@ export class GetdataService {
   	return this.http.post("http://localhost/signupPageAPI/post.php",data);
   }
   deleteposts(id){
-  return this.http.delete("http://localhost/signupPageAPI/delete.php?id="+id);
+  return this.http.delete("http://localhost/signupPageAPI/delete.php/"+id);
   }
    updateposts(id,data){
-   	return this.http.put("http://localhost/signupPageAPI/put.php?id="+id,data);
+   	return this.http.put("http://localhost/signupPageAPI/put.php/"+id,data);
    }
 }

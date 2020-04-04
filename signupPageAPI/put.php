@@ -10,16 +10,17 @@
 	$email = $entityBody->email;
 	$password = $entityBody->password;
 	$gender = $entityBody->gender;
-	$dbconnect = mysqli_connect("localhost","root","", "signupDetails")
-	parse_str($_SERVER["QUERY_STRING"]);
+	$dbconnect = mysqli_connect("localhost","root","", "signupDetails");
+	$arr = explode('/', $_SERVER['REQUEST_URI']);
+	$count = count($arr);
+	$id = $arr[$count - 1];
 	$dbconnect = mysqli_connect("localhost","root","", "signupDetails");
  	if (!$dbconnect) {
     die("Connection failed: " . mysqli_connect_error());
   }
 	$query = "update  signupinfo set firstname=
-	'$firstname', lastname='$lastname', 
-	gender= '$gender',email='$email', password=
-	'$password' where id=$id";
+	'"+$firstname+"', lastname='"+$lastname+"', 
+	gender= '"+$gender+"',email='"+$email+"', password='"+$password+"' where id=$id";
   $is_query_executed = mysqli_query($dbconnect,
 	$query);
 	if ($is_query_executed) {

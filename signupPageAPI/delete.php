@@ -8,7 +8,9 @@
 	header("Content-Type: application/json");
 	header("Access-Control-Allow-Methods: DELETE");
 	$entityBody = file_get_contents('php://input');
-	parse_str($_SERVER["QUERY_STRING"]);
+	$arr = explode('/', $_SERVER['REQUEST_URI']);
+	$count = count($arr);
+	$id = $arr[$count - 1];
 	$dbconnect = mysqli_connect("localhost","root","","signupdetails");
  	if (!$dbconnect) {
     die("Connection failed: " .
