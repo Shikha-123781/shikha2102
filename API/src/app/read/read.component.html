@@ -1,1 +1,21 @@
-<p>read works!</p>
+<table style="width:80%">
+  <tr>
+    <th>Firstname</th>
+    <th>Lastname</th>
+    <th>Email</th>
+    <th>Gender</th>
+    <th>id</th>
+    <th>action</th>
+  </tr>
+  <ng-container *ngFor="let posts of posts">
+	  <tr>
+	  	<td>{{posts.firstname}}</td>
+	  	<td>{{posts.lastname}}</td>
+	  	<td>{{posts.email}}</td>
+	  	<td>{{posts.gender}}</td>
+	  	<td>{{posts.id}}</td>
+	  	<td><button (click)="put(posts.id)">PUT</button><button (click)=
+	  		"delete(posts.id)">DELETE</button></td>
+	  </tr>
+</ng-container>
+</table>

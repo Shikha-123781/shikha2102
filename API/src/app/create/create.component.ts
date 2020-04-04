@@ -6,18 +6,12 @@ import { GetdataService } from '../getdata.service';
   styleUrls: ['./create.component.css']
 })
 export class CreateComponent implements OnInit {
- posts: Object;
- str: String;
-  constructor( private data:GetdataService) { }
-
+  response: any;
+  constructor(private data: GetdataService) { }
   ngOnInit() {
-  	this.data.getposts().subscribe(item=> {
-  		this.posts = item;
-
-  		this.str = JSON.stringify(this.posts);
-  		console.log(this.posts);
-  		
-  	})
   }
-
+  GetChildData(data){  
+   this.data.readposts(data).subscribe((response)=>{ this.response = response;});  
+  }  
 }
+

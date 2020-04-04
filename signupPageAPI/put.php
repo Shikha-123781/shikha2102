@@ -1,29 +1,17 @@
 <?php 
-	$firstname = null;
-	$lastname = null;
-	$email = null;
-	$password = null;
-	$gender = null;
 	header("Acess-Control-Allow-Origin: *");
 	header("Content-Type: application/json");
+	header("Access-Control-Allow-Headers: *");
+	header("Access-Control-Allow-Methods: PUT");
+	$entityBody = file_get_contents('php://input');
+    $entityBody = json_decode($entityBody);
+	$firstname = $entityBody->firstName;
+	$lastname = $entityBody->lastName;
+	$email = $entityBody->email;
+	$password = $entityBody->password;
+	$gender = $entityBody->gender;
+	$dbconnect = mysqli_connect("localhost","root","", "signupDetails")
 	parse_str($_SERVER["QUERY_STRING"]);
-	if ($_REQUEST['firstname'])
-	{
-		$firstname=$_POST['firstname'];
-	}
-	if ($_POST['lastname']) {
-	 $lastname=$_POST['lastname'];
-	} 
-	if ($_POST['email']) {
-	 $email=$_POST['email'];;
-	} 
-	if ($_POST['password']) {
-	  $password=$_POST['password'];
-	}
-	if ($_POST['gender']) {
-	  $gender=$_POST['gender'];
-	}  
-	echo $_SERVER['QUERY_STRING'];
 	$dbconnect = mysqli_connect("localhost","root","", "signupDetails");
  	if (!$dbconnect) {
     die("Connection failed: " . mysqli_connect_error());

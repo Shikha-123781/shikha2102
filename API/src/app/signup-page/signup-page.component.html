@@ -1,0 +1,10 @@
+<div align="center" id="div1">
+	<form [formGroup]="formGroup" (ngSubmit)="submitForm(formGroup)">
+		<input formControlName = "firstName" type="text" placeholder="firstname" name="firstName"><br>
+		<input formControlName = "lastName" type="text" placeholder="lastname" name="lastName"><br>
+		<input formControlName = "email" type="text" placeholder="email" name="email"><br>
+		<input formControlName = "password" type="password" placeholder="password" name="password"><br>
+		<input formControlName = "gender" type="text" placeholder="gender" name="gender">
+		<input type="submit" name="submit" value="submit">
+	</form>
+</div>

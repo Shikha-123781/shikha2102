@@ -7,17 +7,16 @@ export class GetdataService {
 
   constructor( private http :HttpClient) { }
   getposts(){
-  	return this.http.get("https://jsonplaceholder.typicode.com/posts");
+  //	return this.http.get("https://cors-anywhere.herokuapp.com/http://localhost/signupAPI/get.php");
+    return this.http.get("http://localhost/signupPageAPI/get.php");
   }
-  readposts(){
-  	let data ='{"name":"sh","salary":"1000","age":"31"}';
-  	this.http.post("https://jsonplaceholder.typicode.com/posts/101 ",data);
+  readposts(data){
+  	return this.http.post("http://localhost/signupPageAPI/post.php",data);
   }
-  deleteposts(){
-  	this.http.delete("https://jsonplaceholder.typicode.com/posts/1");
+  deleteposts(id){
+  return this.http.delete("http://localhost/signupPageAPI/delete.php?id="+id);
   }
-  updateposts(){
-  	let data ='{"name":"sh","salary":"1000","age":"31"}';
-  	this.http.put("https://jsonplaceholder.typicode.com/posts/1",data);
-  }
+   updateposts(id,data){
+   	return this.http.put("http://localhost/signupPageAPI/put.php?id="+id,data);
+   }
 }

@@ -6,6 +6,7 @@
 	$gender = null;
 	header("Acess-Control-Allow-Origin: *");
 	header("Content-Type: application/json");
+	header("Access-Control-Allow-Methods: DELETE");
 	$entityBody = file_get_contents('php://input');
 	parse_str($_SERVER["QUERY_STRING"]);
 	$dbconnect = mysqli_connect("localhost","root","","signupdetails");
