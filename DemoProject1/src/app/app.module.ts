@@ -13,6 +13,9 @@ import { MatDialogModule, MatFormFieldModule, MatButtonModule,
 MatIconModule, MatInputModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SignupDialogComponent } from './signup-dialog/signup-dialog.component';
+import { HttpRequestService } from './http-request.service';
+import { HttpClientModule} from '@angular/common/http';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,13 +36,14 @@ import { SignupDialogComponent } from './signup-dialog/signup-dialog.component';
     BrowserAnimationsModule,
     MatButtonModule,
     MatIconModule, 
-    MatInputModule
+    MatInputModule,
+    HttpClientModule
   ],
   entryComponents: [
     DialogComponent,
     SignupDialogComponent
   ],
-  providers: [],
+  providers: [HttpRequestService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

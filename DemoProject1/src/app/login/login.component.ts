@@ -1,6 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpRequestService } from '../http-request.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -10,38 +12,45 @@ export class LoginComponent implements OnInit {
   data: any;
   loginForm: FormGroup;
   submitted = false;
-  constructor(private fb: FormBuilder, private router: ActivatedRoute, private route: Router) { }
+  flag = false;;
+  password = null;
+  constructor(private fb: FormBuilder, private router: ActivatedRoute, 
+    private route: Router, private service: HttpRequestService) { }
 
   ngOnInit() {
     if (localStorage.getItem('userName')){
       this.route.navigateByUrl('/showDetails/'+localStorage.getItem('userName'));
     }
     this.loginForm = this.fb.group({
-      userName: ['', [Validators.required, this.validUserName]],
+      userName: ['', [Validators.required, this.validUserName.bind(this)]],
       password: ['', Validators.required]}, 
-      { validator: this.passwordMatch }
+      { validator: this.passwordMatch.bind(this) }
     );   
   }
 
   onSubmit() {   
     this.submitted = true;
     let userName = this.loginForm.get('userName').value;
+    console.log(this.loginForm);
     if (this.loginForm.valid) {
-      localStorage.setItem('userName',userName);
       this.route.navigateByUrl('/showDetails/'+userName);
     }
   }
 
-  validUserName(control: FormControl) {
-    let data;
+  async validUserName(control: FormControl) {
     let userName = control.value;
-    if (localStorage.getItem(userName))
-      data = localStorage.getItem(userName);
-    if (!data) {
-      return {validUserName:true}
-    } else  {
-      return null;
+    let response = await this.service.readPosts();
+    console.log(response);
+    for(let item of response) {
+      if(item['userName']==userName) {
+        this.flag=true;
+        this.password = item['password'];
+        return null;
+      }
     }
+       this.flag = false;
+        return { validUserName: true };
+      
   }
 
   hasPasswordError() {
@@ -49,14 +58,11 @@ export class LoginComponent implements OnInit {
   }
 
   passwordMatch(control:AbstractControl) {
-    let userName =  control.get('userName').value;
-    if (localStorage.getItem(userName)) {
-      let password = JSON.parse(localStorage.getItem(userName)).password;
-      if (password != control.get('password').value) {
-        return {passwordMatch: true};
-      } else  {
-        return null;
-      }
-    }
-  }
+    let password =  control.get('password').value;
+    if(this.flag && password!=this.password) {
+      return { passwordMatch: true };
+    } 
+      return null;
+  }  
 }
+

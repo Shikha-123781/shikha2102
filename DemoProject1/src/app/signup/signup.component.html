@@ -11,21 +11,6 @@
     <mat-error *ngIf="submitted && formGroup.get('userName').errors && formGroup.get('userName').errors.required">userName is required</mat-error> 
     <mat-error *ngIf="submitted && formGroup.get('userName').errors && formGroup.get('userName').errors.validUser">userName is already exist</mat-error>
     <br>
-    <div formGroupName = "address">
-      <p>address</p>
-      <mat-form-field>
-        <input matInput type="text" placeholder="street" class="form-control" formControlName = "street">
-      </mat-form-field>
-      <br>
-      <mat-form-field>
-        <input matInput type="text" placeholder="city" class="form-control" formControlName = "city">
-      </mat-form-field>
-      <br>
-      <mat-form-field>
-        <input matInput type="text" placeholder="state" class="form-control" formControlName = "state">
-      </mat-form-field>
-    </div>
-    <br>
     <mat-form-field>
       <input matInput type="text" placeholder="email" class="form-control" formControlName = "email">
     </mat-form-field>

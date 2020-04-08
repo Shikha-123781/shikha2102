@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import {DialogComponent} from '../dialog/dialog.component';
 import { MatDialog,MatDialogConfig } from '@angular/material/dialog';
+import { HttpRequestService } from '../http-request.service';
 declare const $:any;
 @Component({
   selector: 'app-show-details',
@@ -12,8 +13,8 @@ declare const $:any;
 export class ShowDetailsComponent implements OnInit {
   userName: any;
   folderUser: any;
-  folderChain : any[];
-  isInsideFolder :any;
+  folderChain = [];
+  isInsideFolder = false;
   folderList = [];
   folder = [];
   folderValue = [];
@@ -21,56 +22,59 @@ export class ShowDetailsComponent implements OnInit {
   file = [];
   fileUser: any;
   fileList = [];
+  view: string;
   listView = true;
   gridView = false;
+  response: any;
+  res: any;
+  id: any;
+  isLogin: any;
 
   constructor(private router: ActivatedRoute,
   private route: Router,
-  private dialog: MatDialog) { }
+  private dialog: MatDialog, private service: HttpRequestService) { }
 
-  ngOnInit() {
-    if (!localStorage.getItem('userName')) {
-      this.route.navigateByUrl('/');
-    }
-    this.router.params.forEach((userName: Params) => {
+  async ngOnInit() {
+    this.router.params.forEach((userName: Params)=>{
       this.userName = userName.userName;
     });
-    this.folderUser = this.userName + '1'; 
-    this.fileUser = this.userName + '2';
-    if (localStorage.getItem('folderChain')) {
-      this.folderChain = JSON.parse(localStorage.getItem('folderChain'));
-    } else {
-      this.folderChain = [];
-    }
+    let result = await this.service.readPostByuserName(this.userName);
+      if(result['folderChain']) {
+        this.folderChain = JSON.parse(result['folderChain']);
+      } else {
+        this.folderChain = [];
+      }
+      this.view = result['view'];
+      this.id = result['id'];
+      this.isLogin = result['isLogin'];
     if (this.folderChain.length) {
       this.isInsideFolder = true;
     }
-    if (localStorage.getItem('view')) {
-      const view = localStorage.getItem('view');
-      if (view == 'listView') {
-        this.listView = true;
-      } else {
-        this.gridView = true;
+      if (this.view == 'listView') {
+       this.listView = true;
+       } else {
+         this.gridView = true;
         this.listView = false;
       }
-    }
   }
 
-  ngDoCheck() {
-    if (localStorage.getItem(this.folderUser)) {
-      this.folderValue = JSON.parse(localStorage.getItem(this.folderUser));
-      this.folder = this.folderValue;
-    } 
-    if (localStorage.getItem(this.fileUser)) {
-      this.fileValue = JSON.parse(localStorage.getItem(this.fileUser));
-      this.fileValue = this.fileValue;
-    }
-    if (localStorage.getItem('folderChain')) {
-      this.folderChain = JSON.parse(localStorage.getItem('folderChain'));
-    } else {
-      this.folderChain = [];
-      localStorage.setItem('folderChain',JSON.stringify(this.folderChain))
-    }
+   async ngDoCheck() {
+    let result = await this.service.readPostByuserName(this.userName);
+    this.res = result;
+    if(this.res['folder']) {
+        this.folderValue = JSON.parse(this.res['folder']);
+        this.folder = this.folderValue;
+      }
+      if(this.res['file']) {
+        this.fileValue = JSON.parse(this.res['file']);
+        this.file = this.fileValue;
+      }
+      if(this.res['folderChain']) {
+        this.folderChain = JSON.parse(this.res['folderChain']);
+      } else {
+        this.folderChain = [];
+       let result = await this.service.updateStructure(JSON.stringify(this.folder),JSON.stringify(this.file),JSON.stringify(this.folderChain),this.view,this.userName);
+      }
     let folderChainLength = this.folderChain.length;
     this.fileList = [];
     this.folderList = [];
@@ -135,53 +139,54 @@ export class ShowDetailsComponent implements OnInit {
   }
 
   folderAdd(folderName) {
-    let index = 0;
-    if (this.isInsideFolder) {
-      this.addFolder(this.folder,this.folderChain[0],folderName,index); 
-      this.addFolder(this.file,this.folderChain[0],folderName,index);   
-    } else {
-      if (localStorage.getItem(this.folderUser)) {
-        this.folder = JSON.parse(localStorage.getItem(this.folderUser));
-        this.folder.push({[folderName]:[]});
-        if (localStorage.getItem(this.fileUser)) {
-          this.file = JSON.parse(localStorage.getItem(this.fileUser));
-        }
-        this.file.push({[folderName]:[]});
-      } else {
-        this.folder.push({[folderName]:[]});
-        if (localStorage.getItem(this.fileUser)) {
-          this.file = JSON.parse(localStorage.getItem(this.fileUser));
-        }
-        this.file.push({[folderName]:[]});
-      }
+     let index = 0;
+     if (this.isInsideFolder) {
+       this.addFolder(this.folder,this.folderChain[0],folderName,index); 
+       this.addFolder(this.file,this.folderChain[0],folderName,index);   
+     } else {
+     this.fetchFolderAndFile();
+      this.folder.push({[folderName]:[]});
+      this.file.push({[folderName]:[]});
     }
-    let str = JSON.stringify(this.folder);
-    localStorage.setItem(this.folderUser,str);
-    str = JSON.stringify(this.file);
-    localStorage.setItem(this.fileUser,str);
+    this.updateStructure();
+  }
 
+  async fetchFolderAndFile() {
+    let result = await this.service.readPostByuserName(this.userName);
+      this.response = result;
+    if(this.response['folder']) {
+      this.folder = JSON.parse(this.response['folder']);
+    } else {
+      this.folder =[];
+    }
+    if(this.response['file']) {
+      this.file = JSON.parse(this.response['file']);
+    } else {
+      this.file = [];
+    }
+  }
+
+  async updateStructure() {
+    let folder = JSON.stringify(this.folder);
+    let file = JSON.stringify(this.file);
+    let result = await this.service.updateStructure(folder,file,JSON.stringify(this.folderChain),this.view,this.userName);
   }
 
   fileAdd(fileName) {
     let index=0;
-    if (localStorage.getItem(this.fileUser)) {
-      this.file= JSON.parse(localStorage.getItem(this.fileUser));
-    } else {
-      this.file = [];
-    }
+    this.fetchFolderAndFile();
     if (this.isInsideFolder) {
       this.addFile(this.file,this.folderChain[0],fileName,index);   
     } else {
       this.file.push(fileName);
     } 
-    let str = JSON.stringify(this.file);
-    localStorage.setItem(this.fileUser,str);
+    this.updateStructure();
   }
 
-  onClick(name) {
+  async onClick(name) {
     this.isInsideFolder = true;
     this.folderChain.push(name);
-    localStorage.setItem('folderChain',JSON.stringify(this.folderChain));
+   let result = await this.service.updateStructure(JSON.stringify(this.folder),JSON.stringify(this.file),JSON.stringify(this.folderChain),this.view,this.userName);
   }
 
   addFolder(directory,targetFolder,folderName,index) {
@@ -220,35 +225,34 @@ export class ShowDetailsComponent implements OnInit {
     }
   }
 
-  back() {
+  async back() {
     this.folderChain.pop();
-    localStorage.setItem('folderChain',JSON.stringify(this.folderChain));
+   let result = await this.service.updateStructure(JSON.stringify(this.folder),JSON.stringify(this.file),JSON.stringify(this.folderChain),this.view,this.userName);
   }   
 
-  logout() {
-    localStorage.removeItem('userName');
-    localStorage.removeItem('folderChain');
-    localStorage.removeItem('view');
+  async logout() {
+    await this.service.remove(this.id);
     this.route.navigateByUrl("/");
   } 
 
-  viewList() {
+  async viewList() {
     this.listView = true;
     this.gridView = false;
-    localStorage.setItem('view','listView');  
+    await this.service.updateStructure(JSON.stringify(this.folder),JSON.stringify(this.file),JSON.stringify(this.folderChain),'listView',this.userName);  
   }
 
-  viewGrid() {
+  async viewGrid() {
     this.listView = false;
     this.gridView = true;
-    localStorage.setItem('view','gridView');
+    // localStorage.setItem('view','gridView');
+     let result = await this.service.updateStructure(JSON.stringify(this.folder),JSON.stringify(this.file),JSON.stringify(this.folderChain),'gridView',this.userName);  
   }
 
   dialogOpen(type) {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '250px',
       height:'300px',
-      data: {type:type,userName:this.userName, title: 'Enter ' + type + ' name'},
+      data: {type:type, title: 'Enter ' + type + ' name', userName: this.userName},
       disableClose: true
     });
     

@@ -3,6 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import { AbstractControl, FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpRequestService } from '../http-request.service';
+
 declare const $:any;
 @Component({
   selector: 'app-dialog',
@@ -21,7 +23,7 @@ export class DialogComponent implements OnInit {
   isNameAlreadyExist = false;
   notExistName = false;
   constructor(private fb: FormBuilder, public dialogRef: MatDialogRef<DialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) { }
+              @Inject(MAT_DIALOG_DATA) public data: any, private service: HttpRequestService) { }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -41,17 +43,18 @@ export class DialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  save() {
+  async save() {
     let name = this.form.get('name').value;
     let key;
     let count;
     let directory = [];
     if(name) {
-      this.folderChain = JSON.parse(localStorage.getItem('folderChain'));
+      let result = await this.service.readPostByuserName(this.data.userName);
+      this.folderChain = JSON.parse(result['folderChain']);
       if (this.data.type == 'folder') {
-        directory = JSON.parse(localStorage.getItem(this.data.userName+'1'));
+        directory = JSON.parse(result['folder']);
       } else {
-        directory = JSON.parse(localStorage.getItem(this.data.userName+'2'));
+        directory = JSON.parse(result['file']);
       }
       for (let index in this.folderChain) {
         key = this.folderChain[index];
