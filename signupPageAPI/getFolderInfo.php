@@ -2,7 +2,7 @@
   include_once './databaseConnection.php';
   $database = new Database();
   $dbconnect = $database->getConnection();
-	$query = "select * from signupinfo";
+	$query = "select * from signupinfo where userName=$userName";
 	$query_result = mysqli_query($dbconnect,$query);
   if (!$query_result) {
     die("Could not successfully run query ($sql) from DB: " . mysqli_error());
@@ -20,6 +20,7 @@
       "email" => $email,
       "age" => $age,
       "password"=>$password,
+      "isLogin"=>$isLogin,
       "id" => $id
     );
     array_push($_response,$response_item);
